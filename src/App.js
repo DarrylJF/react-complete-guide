@@ -1,6 +1,7 @@
 //import React, { useState, Component} from 'react';
 import React, { Component } from 'react';
 import './App.css';
+
 import Person from './Person/Person';
 
 class App extends Component {
@@ -11,7 +12,8 @@ class App extends Component {
       { name: "name 2", age: 18 },
       { name: "name 3", age: 44 }
     ],
-    otherState: 'some other value'
+    otherState: 'some other value',
+    showPersons: false
   }
 
   switchNameHandler = (newName) => {
@@ -34,24 +36,65 @@ class App extends Component {
     })
   }
 
+  togglePersonHandler = () => {
+    const doesShow = this.state.showPersons;
+    this.setState({showPersons: !doesShow}); // set showPersons == to what does show is not. doesShow is equal to the showPersons state which is false so it will set it to true
+  }
+
   render() {
+    const style = {
+      backgroundColor: 'orange',
+      font: 'inherit',
+      padding: '8px',
+      color: 'white',
+      cursor: 'pointer'
+    };
+
+    let persons = null; // persons is null by default (does not show)
+
+    if (this.state.showPersons) { // if showPersons is true (show)
+      persons = (
+        <div>
+          {this.state.persons.map(person => {
+            return <Person 
+                      name={person.name} 
+                      age={person.age}
+                    />
+          })}
+        </div>
+      );
+    }
+
     return (
       <div className="App">
+
          <h1>this is a test</h1>
+
            <p>this is a paragraph</p>
-          <button onClick={() => this.switchNameHandler('max!!')}>Switch Name</button>
-           <Person
-          name={this.state.persons[0].name} age={this.state.persons[0].age} changed={this.nameChangeHandler} />
-          <Person 
-            name={this.state.persons[1].name} age={this.state.persons[1].age} click={this.switchNameHandler.bind(this, 'max!')} />
-          <Person 
-            name={this.state.persons[2].name} age={this.state.persons[2].age} />
+
+          <button 
+            style={style}
+            onClick={this.togglePersonHandler}>Show/Hide
+          </button>
+          {persons}          
       </div>
     );
   }
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
 // const app = props => {
 //   const [ personState, setPersonsState ] = useState({
 //     persons: [
