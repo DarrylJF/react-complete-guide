@@ -8,37 +8,42 @@ class App extends Component {
 
   state = {
     persons: [
-      { name: "name 1", age: 28 },
-      { name: "name 2", age: 18 },
-      { name: "name 3", age: 44 }
+      { id: 1, name: "name 1", age: 28 },
+      { id: 2, name: "name 2", age: 18 },
+      { id: 3, name: "name 3", age: 44 }
     ],
     otherState: 'some other value',
     showPersons: false
   }
 
-  switchNameHandler = (newName) => {
-    this.setState( {
-      persons: [
-        { name: newName, age: 32 },
-        { name: "name 2", age: 18 },
-        { name: "name 8", age: 67 }
-      ]
-    })
-  }
+  nameChangeHandler = (event, id) => {
+    const personIndex = this.state.persons.findIndex(p => {
+      return p.id === id;
+    });
 
-  nameChangeHandler = (event) => {
-    this.setState( {
-      persons: [
-        { name: event.target.value, age: 23 },
-        { name: "name 2", age: 18 },
-        { name: "name 3", age: 44 }
-      ]
-    })
+    const person = {
+      ...this.state.persons[personIndex]
+    };
+
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+
+    this.setState( {persons: persons} );
   }
 
   togglePersonHandler = () => {
     const doesShow = this.state.showPersons;
     this.setState({showPersons: !doesShow}); // set showPersons == to what does show is not. doesShow is equal to the showPersons state which is false so it will set it to true
+  }
+
+  deletePersonHandler = (personIndex) => {
+    // const persons = this.state.persons.slice();
+    // always update state in an immutable fashion. create a copy, makes changes to the copy, and then update state using setState()
+    const persons = [...this.state.persons];
+    persons.splice(personIndex, 1);
+    this.setState({persons: persons});
   }
 
   render() {
@@ -52,14 +57,17 @@ class App extends Component {
 
     let persons = null; // persons is null by default (does not show)
 
-    if (this.state.showPersons) { // if showPersons is true (show)
+    if ( this.state.showPersons ) { // if showPersons is true (show)
       persons = (
         <div>
-          {this.state.persons.map(person => {
+          {this.state.persons.map((person, index) => {
             return <Person 
-                      name={person.name} 
-                      age={person.age}
-                    />
+              click={() => this.deletePersonHandler(index)}
+              name={person.name} 
+              age={person.age} 
+              key={person.id} // default property react expects to find on an element which is rendered via a list (map)
+              changed={(event) => this.nameChangeHandler(event, person.id)}
+              /> // end of Person Component
           })}
         </div>
       );
@@ -67,11 +75,8 @@ class App extends Component {
 
     return (
       <div className="App">
-
          <h1>this is a test</h1>
-
            <p>this is a paragraph</p>
-
           <button 
             style={style}
             onClick={this.togglePersonHandler}>Show/Hide
