@@ -1,10 +1,12 @@
 // import React, { useState, Component} from 'react';
 // import styled from 'styled-components';
 // import Radium, { StyleRoot } from 'radium';
+// import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 import React, { Component } from 'react';
 import classes from './App.css';
-import Person from './Person/Person';
+import Person from '../components/Persons/Person/Person';
+
 
 
 class App extends Component {
@@ -64,7 +66,8 @@ class App extends Component {
                     name={person.name}
                     age={person.age}
                     key={person.id}/>
-          })}
+          })
+          }
           </div> 
       );
       btnClass = classes.Red;
