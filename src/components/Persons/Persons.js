@@ -5,10 +5,7 @@ class Persons extends PureComponent {
   
   // shouldComponentUpdate(nextProps, nextState) {
   //   console.log('[Persons.js] shouldComponentUpdate');
-  //   if (nextProps.persons !== this.props.persons || 
-  //       nextProps.changed !== this.props.changed || 
-  //       nextProps.clicked !== this.props.clicked
-  //   ) {
+  //   if (nextProps.persons !== this.props.persons) {
   //     return true;
   //   }else {
   //     return false;
@@ -38,7 +35,8 @@ class Persons extends PureComponent {
         click={() => this.props.clicked( index  )}
         name={person.name}
         age={person.age}
-        key={person.id}/>
+        key={person.id}
+        isAuth={this.props.isAuthenticated}/>
       );
     });
   } 
